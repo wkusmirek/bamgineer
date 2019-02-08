@@ -971,6 +971,8 @@ def run_pipeline(results_path):
 
     chr_list = ['chr' + str(x) for x in range(1, 23)]
     chr_list.extend(['chrX', 'chrY'])
+    chr_list.extend([str(x) for x in range(1, 23)])
+    chr_list.extend(['X', 'Y'])
 
     t0 = time.time()
     outbamfn = params.GetOutputFileName()
