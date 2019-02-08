@@ -554,7 +554,7 @@ def splitBedByChr(cnvbedfn, hap_dir):
     df.columns = ['chr', 'start', 'end'] #, 'hap_type', 'abs_cn']
     for chromosome in chr_bedlist:
         dfi = df.loc[(df['chr'] == chromosome)]
-	fn = chromosome+'_non_roi.bed'
+	fn = str(chromosome)+'_non_roi.bed'
 	#else statement for len != cn
         dfi.to_csv("/".join([hap_dir, fn]), sep='\t', header=None, encoding='utf-8', index=False)
 
