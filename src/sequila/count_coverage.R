@@ -9,6 +9,7 @@ library(dplyr)
 args = commandArgs(trailingOnly=TRUE)
 bed = args[1]
 bam = args[2]
+resultsFile = args[3]
 
 #Set Spark parameters and connect
 driver_mem <- "40g"
@@ -44,4 +45,4 @@ res <- sequila_sql(ss,'results',query)
 readCountPerTarget <-  collect(res)
 head(readCountPerTarget)
 
-#readCountPerTarget[readCountPerTarget$Start > 255000 & readCountPerTarget$Start < 265000,]
+write.table(readCountPerTarget, file = resultsFile, row.names=FALSE, na="", col.names=FALSE, sep=",")

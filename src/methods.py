@@ -1020,7 +1020,7 @@ def run_pipeline(results_path):
         pool1.join()
 
     # count coverage for .bam files
-    runCommand("Rscript /home/bdgeek/bamgineer/src/sequila/count_coverage.R /home/dnaasm/CNV/20130108.exome.targets.chr20.bed /home/dnaasm/CNV/bamgineer-sequila/splitbamdir/*bam")
+    runCommand("Rscript /home/bdgeek/bamgineer/src/sequila/count_coverage.R /home/dnaasm/CNV/20130108.exome.targets.chr20.bed /home/dnaasm/CNV/bamgineer-sequila/splitbamdir/20.bam /home/dnaasm/CNV/bamgineer-sequila/results.csv")
 
     time.sleep(.1)
     #merge_final(outbamfn, finalbams_path)
