@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM biodatageeks/bdg-sequila:0.5.2
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
@@ -16,6 +16,8 @@ RUN apt-get update && \
             vim \
             openjdk-8-jre \
             nano
+
+RUN cd /
 
 # samtools/1.2
 RUN wget https://github.com/samtools/samtools/releases/download/1.2/samtools-1.2.tar.bz2 && \
@@ -40,7 +42,7 @@ RUN wget https://github.com/statgen/bamUtil/archive/master.tar.gz && \
 # sambamba/0.5.4
 RUN wget https://github.com/biod/sambamba/releases/download/v0.5.4/sambamba_v0.5.4_linux.tar.bz2 && \
   tar xjf sambamba_v0.5.4_linux.tar.bz2
-RUN chmod 777 /sambamba_v0.5.4
+RUN chmod 777 sambamba_v0.5.4
 
 # beagle 
 RUN wget https://faculty.washington.edu/browning/beagle/beagle.09Nov15.d2a.jar
@@ -53,4 +55,4 @@ RUN pip install pathos
 RUN pip install pandas
 
 # bamgineer
-RUN git clone https://github.com/wkusmirek/bamgineer.git
+RUN git clone --single-branch --branch sequila https://github.com/wkusmirek/bamgineer.git
