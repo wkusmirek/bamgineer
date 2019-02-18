@@ -1005,7 +1005,7 @@ def run_pipeline(results_path):
 
         result1 = pool1.map_async(find_roi_bam, chromosome_event).get(9999999)
         result2 = pool1.map_async(implement_cnv, chromosome_event).get(9999999)
-        result3 = pool1.map_async(find_non_roi_bam, chr_list).get(9999999)
+        #result3 = pool1.map_async(find_non_roi_bam, chr_list).get(9999999)
         pool1.close()
 
     except KeyboardInterrupt:
@@ -1020,7 +1020,7 @@ def run_pipeline(results_path):
         pool1.join()
 
     time.sleep(.1)
-    merge_final(outbamfn, finalbams_path)
+    #merge_final(outbamfn, finalbams_path)
     #mergeSortBamFiles(outbamfn, finalbams_path)
     t1 = time.time()
     #shutil.rmtree(tmpbams_path)
