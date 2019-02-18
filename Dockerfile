@@ -17,12 +17,6 @@ RUN apt-get update && \
             openjdk-8-jre \
             nano
 
-# PGP bams and VCF 
-#RUN wget https://my.pgp-hms.org/user_file/download/2312 && \
-#  mv 2312 chr21.bam
-#RUN wget https://my.pgp-hms.org/user_file/download/2291 && \
-#  mv 2291 pgp.vcf 
-
 # samtools/1.2
 RUN wget https://github.com/samtools/samtools/releases/download/1.2/samtools-1.2.tar.bz2 && \
   tar xjf samtools-1.2.tar.bz2 && \
