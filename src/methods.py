@@ -1019,6 +1019,9 @@ def run_pipeline(results_path):
     finally:
         pool1.join()
 
+    # count coverage for .bam files
+    runCommand("Rscript /home/bdgeek/bamgineer/src/sequila/count_coverage.R /home/dnaasm/CNV/20130108.exome.targets.chr20.bed /home/dnaasm/CNV/bamgineer-sequila/splitbamdir/*bam")
+
     time.sleep(.1)
     #merge_final(outbamfn, finalbams_path)
     #mergeSortBamFiles(outbamfn, finalbams_path)

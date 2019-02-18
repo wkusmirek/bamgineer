@@ -5,6 +5,11 @@ library(data.table)
 library(reshape)
 library(dplyr)
 
+# command line arguments
+args = commandArgs(trailingOnly=TRUE)
+bed = args[1]
+bam = args[2]
+
 #Set Spark parameters and connect
 driver_mem <- "40g"
 master <- "local[20]"
@@ -15,15 +20,15 @@ sequila_sql(ss,query="CREATE DATABASE sequila")
 sequila_sql(ss,query="USE sequila")
 
 #create a BAM data source with reads
-sequila_sql(ss,'reads','CREATE TABLE reads USING org.biodatageeks.datasources.BAM.BAMDataSource OPTIONS(path "/home/dnaasm/CNV/bamgineer-sequila/splitbamdir/*bam")')
+sequila_sql(ss,'reads',paste('CREATE TABLE reads USING org.biodatageeks.datasources.BAM.BAMDataSource OPTIONS(path "',bam,'")',sep=""))
 
 # Check out the reads
 sequila_sql(ss, query= "select * from reads limit 10")
 
 #create a table with target data
-sequila_sql(ss,'targets','CREATE TABLE targets (Chr string, Start integer,End integer, v1 string)
+sequila_sql(ss,'targets',paste('CREATE TABLE targets (Chr string, Start integer,End integer, v1 string)
 USING csv
-OPTIONS (path "/home/dnaasm/CNV/20130108.exome.targets.chr20.bed", header "false", inferSchema "false", delimiter "\t")')
+OPTIONS (path "', bed, '", header "false", inferSchema "false", delimiter "\t")',sep=""))
 
 #inspect content of targets table
 sequila_sql(ss, query= "select * from targets limit 10")

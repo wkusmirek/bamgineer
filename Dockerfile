@@ -54,9 +54,9 @@ RUN pip install PyVCF==0.6.7
 RUN pip install pathos
 RUN pip install pandas
 
-# bamgineer
-RUN git clone --single-branch --branch sequila https://github.com/wkusmirek/bamgineer.git
-
 # R packages
 RUN Rscript -e "install.packages(c('data.table', 'reshape', 'dplyr'), lib='/usr/local/lib/R/site-library')"
+
+# bamgineer
+RUN git clone --single-branch --branch sequila https://github.com/wkusmirek/bamgineer.git
 
