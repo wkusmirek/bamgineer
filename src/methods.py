@@ -1020,7 +1020,30 @@ def run_pipeline(results_path):
         pool1.join()
 
     # count coverage for .bam files
-    runCommand("Rscript /home/bdgeek/bamgineer/src/sequila/count_coverage.R /home/dnaasm/CNV/20130108.exome.targets.chr20.bed /home/dnaasm/CNV/bamgineer-sequila/splitbamdir/20.bam /home/dnaasm/CNV/bamgineer-sequila/results.csv")
+    bamgineer_path = bamhelp.GetBamgineerPath()
+    exons_path = bamhelp.GetExons()
+    output_path = params.GetOutputFileName()
+    spltbams_path = params.GetSplitBamsPath()
+    cov_path = "/".join([res_path, 'cov'])
+    if not os.path.exists(cov_path):
+        os.makedirs(cov_path)
+
+    # input files
+    for file in os.listdir(spltbams_path):
+        if file.endswith("byname.bam"):
+            bam_path = os.path.join(spltbams_path, file)
+            res_path = "/".join([cov_path, os.path.basename(bam_path),]) + ".csv"
+            runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + res_path)
+
+    # gain/loss files
+    for file in os.listdir(finalbams_path):
+        if file.endswith(".bam"):
+            bam_path = os.path.join(finalbams_path, file)
+            res_path = "/".join([cov_path, os.path.basename(bam_path),]) + ".csv"
+            runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + res_path)
+
+    # merge cov files
+    # TODO
 
     time.sleep(.1)
     #merge_final(outbamfn, finalbams_path)

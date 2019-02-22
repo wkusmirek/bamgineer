@@ -39,7 +39,10 @@ def GetJavaPath():
 def GetBeaglePath():
     beagle_path = configReader.get('SOFTWARE', 'beagle_path')
     return beagle_path
-  
+
+def GetBamgineerPath():
+    bamgineer_path = configReader.get('SOFTWARE', 'bamgineer_path')
+    return bamgineer_path  
 
 def GetPicardPath():
     picard_path = configReader.get('SOFTWARE', 'picard_path')

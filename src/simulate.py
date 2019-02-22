@@ -47,8 +47,8 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='adds CN spikes to reads, outputs modified reads as .bam along with mates')
-    parser.add_argument('-outbam', dest='outBamFile', required=True,
-                        help='.bam file name for output')
+    parser.add_argument('-out', dest='outBamFile', required=True,
+                        help='.csv file name for output')
     parser.add_argument('-cnv_bed', dest='cnvBed', required=False,
                         help='list of CNV .bed files for different events')
     parser.add_argument('-inbam', dest='inbamFile', required=False,
