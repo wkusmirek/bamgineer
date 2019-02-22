@@ -1027,23 +1027,29 @@ def run_pipeline(results_path):
     cov_path = "/".join([res_path, 'cov'])
     if not os.path.exists(cov_path):
         os.makedirs(cov_path)
+    base_cov_path = "/".join([cov_path, 'base'])
+    if not os.path.exists(base_cov_path):
+        os.makedirs(base_cov_path)
+    gen_cov_path = "/".join([cov_path, 'gen'])
+    if not os.path.exists(gen_cov_path):
+        os.makedirs(gen_cov_path)
 
     # input files
     for file in os.listdir(spltbams_path):
         if file.endswith("byname.bam"):
             bam_path = os.path.join(spltbams_path, file)
-            res_path = "/".join([cov_path, os.path.basename(bam_path),]) + ".csv"
+            res_path = "/".join([base_cov_path, os.path.basename(bam_path),]) + ".csv"
             runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + res_path)
 
     # gain/loss files
     for file in os.listdir(finalbams_path):
         if file.endswith(".bam"):
             bam_path = os.path.join(finalbams_path, file)
-            res_path = "/".join([cov_path, os.path.basename(bam_path),]) + ".csv"
+            res_path = "/".join([gen_cov_path, os.path.basename(bam_path),]) + ".csv"
             runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + res_path)
 
     # merge cov files
-    # TODO
+    runCommand("Rscript " + bamgineer_path + "/src/sequila/merge_coverage_files.R " + base_cov_path + " " + gen_cov_path + " " + output_path)
 
     time.sleep(.1)
     #merge_final(outbamfn, finalbams_path)
