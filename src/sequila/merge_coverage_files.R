@@ -44,6 +44,6 @@ colnames(genCov) <- c("sample","chr","st_bp","ed_bp","length","cov")
 
 #create a table with target data
 cov <- '/home/dnaasm/CNV/bamgineer-sequila/results_bamgineer/cov/gen/20LOSSB255000_HAP2.bam.csv'
-sequila_sql(ss,'genCov',paste('CREATE TABLE targets (Sample string, Chr string, Start integer, End integer, Len integer, Cov integer)
+sequila_sql(ss,'targets',paste('CREATE TABLE targets (Sample string, Chr string, Start integer, End integer, Len integer, Cov integer)
 USING csv
 OPTIONS (path "', cov, '", header "false", inferSchema "false", delimiter ",")',sep=""))

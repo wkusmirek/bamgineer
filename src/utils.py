@@ -286,8 +286,7 @@ def sortByName(inbamfn, outbamfn):
     java_path, beagle_path, picard_path, samtools_path, bedtools_path, vcftools_path, sambamba_path = params.GetSoftwarePath()
 
     if (inbamfn is not None):
-        command = " ".join([sambamba_path, "sort -n", inbamfn, "-o", outbamfn])
-        print(command)
+        command = " ".join([samtools_path, "sort -n", inbamfn, outbamfn])
         runCommand(command)
 
 

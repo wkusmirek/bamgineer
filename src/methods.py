@@ -145,7 +145,14 @@ def find_roi_bam(chromosome_event):
                 cmd = " ".join(["sort -u", exonsinroibed, "-o", exonsinroibed]);
                 runCommand(cmd)
                 print(" ___ extracting roi bams  ___")
-                extractPairedReadfromROI(sortbyname, exonsinroibed, roi)
+                # extractPairedReadfromROI(sortbyname, exonsinroibed, roi)
+                sorted_roi = ".".join([roi, "sortedbyname"])
+                unsorted_roi = ".".join([roi, "unsortedbyname"])
+                extractAllReadsfromROI(sortbyCoord, exonsinroibed, unsorted_roi)
+                sortByName(unsorted_roi, sorted_roi)
+                extractPairedReadfromROI(sorted_roi, exonsinroibed, roi)
+                cmd = " ".join(["rm", sorted_roi, unsorted_roi]);
+                runCommand(cmd)
                 removeIfEmpty(tmpbams_path, ntpath.basename(roi))
                 pysam.sort(roi, roisort)
                 pysam.index(roisort + '.bam')
