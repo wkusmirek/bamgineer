@@ -108,6 +108,44 @@ def initialize_pipeline(phase_path, haplotype_path, cnv_path):
     logger.debug("--- initialization complete ---")
     return
 
+def generateCNVCoord(phase_path):
+    exons_path = bamhelp.GetExons()
+    phased_bed = "/".join([phase_path, 'PHASED.BED'])
+    bedtools_path = bamhelp.GetBedtoolsPath()
+    tmp_path = "/".join([phase_path, 'tmp'])
+    occ_path = "/".join([phase_path, 'tmp2'])
+    number_of_snps_path = "/".join([phase_path, 'number_of_snps_per_exon.bed'])
+
+    command = " ".join([bedtools_path, "intersect -a", phased_bed, "-b", exons_path, "-wa -wb | awk '{print $7 \" \" $8 \" \" $9}' >", tmp_path])
+    runCommand(command)
+
+    command = " ".join(["cat", tmp_path, "| uniq --count | awk '{print $2 \" \" $3 \" \" $4 \" \" $1}' >", occ_path])
+    runCommand(command)
+
+    exons_file = open(exons_path, 'r')
+    occ_file = open(occ_path, 'r')
+    number_of_snps_file = open(number_of_snps_path, 'w')
+    occ = occ_file.readline().strip('\n').split(" ")
+    for line in exons_file:
+        c = line.strip('\n').split("\t")
+
+        if c[0] == occ[0] and c[1] == occ[1] and c[2] == occ[2]:
+            number_of_snps_file.write(c[0] + '\t' + c[1] + '\t' + c[2] + '\t' + occ[3] + '\n')  # chr start stop num_occ
+            occ = occ_file.readline().strip('\n').split(" ")
+        else:
+            number_of_snps_file.write(c[0] + '\t' + c[1] + '\t' + c[2] + '\t' + '0' + '\n')  # chr start stop num_occ
+    exons_file.close()
+    occ_file.close()
+    number_of_snps_file.close()
+
+    command = " ".join(["rm", tmp_path, occ_path])
+    runCommand(command)
+
+    cnvdir = "/".join([results_path, "cnv_dir"])
+    cnv_path = "/".join([cnvdir, 'cnv.bed'])
+
+
+
 def init_file_names(chr, tmpbams_path, haplotypedir, event):
     """
     Initialize file names for: 
@@ -995,6 +1033,8 @@ def run_pipeline(results_path):
         os.makedirs(phase_path)
 
     initialize0(phase_path, cancer_dir_path)
+
+    generateCNVCoord(phase_path)
 
     for cnv_path in cnv_list:
         initialize_pipeline(phase_path, haplotype_path, cnv_path)
