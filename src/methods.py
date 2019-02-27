@@ -108,7 +108,7 @@ def initialize_pipeline(phase_path, haplotype_path, cnv_path):
     logger.debug("--- initialization complete ---")
     return
 
-def generateCNVCoord(phase_path):
+def generateCNVCoord(phase_path, results_path):
     exons_path = bamhelp.GetExons()
     phased_bed = "/".join([phase_path, 'PHASED.BED'])
     bedtools_path = bamhelp.GetBedtoolsPath()
@@ -1034,7 +1034,7 @@ def run_pipeline(results_path):
 
     initialize0(phase_path, cancer_dir_path)
 
-    generateCNVCoord(phase_path)
+    generateCNVCoord(phase_path, results_path)
 
     for cnv_path in cnv_list:
         initialize_pipeline(phase_path, haplotype_path, cnv_path)
