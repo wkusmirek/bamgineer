@@ -62,12 +62,12 @@ def initialize0(results_path, cancer_dir_path):
     return
 
 
-def initialize_pipeline(phase_path, haplotype_path, cnv_path):
+def initialize_pipeline(results_path, phase_path, haplotype_path, cnv_path):
     """
     Intersect CNV region with exons and then intersect with phased VCF bed.
     """
     exons_path = bamhelp.GetExons()
-    cnv_bed = params.GetCNV()
+    cnv_bed =  "/".join([results_path, 'cnv.bed'])
 
     event, extension = os.path.splitext(os.path.basename(cnv_path))
 
@@ -128,7 +128,6 @@ def generateCNVCoord(phase_path, results_path):
     occ = occ_file.readline().strip('\n').split(" ")
     for line in exons_file:
         c = line.strip('\n').split("\t")
-
         if c[0] == occ[0] and c[1] == occ[1] and c[2] == occ[2]:
             number_of_snps_file.write(c[0] + '\t' + c[1] + '\t' + c[2] + '\t' + occ[3] + '\n')  # chr start stop num_occ
             occ = occ_file.readline().strip('\n').split(" ")
@@ -142,9 +141,31 @@ def generateCNVCoord(phase_path, results_path):
     runCommand(command)
 
     cnvdir = "/".join([results_path, "cnv_dir"])
-    cnv_path = "/".join([cnvdir, 'cnv.bed'])
+    cnv_path = "/".join([results_path, 'cnv.bed'])
+    cnv_file = open(cnv_path, 'w')
+    # TODO
 
+    cnv_length = 3
+    min_snps_per_exon = 2
+    number_of_snps_file = open(number_of_snps_path, 'r')
 
+    while True:
+        line = number_of_snps_file.readline()
+        if not line: break
+        c = line.strip('\n').split("\t")
+        if int(c[3]) > min_snps_per_exon:
+            st_bp = int(c[1])
+            for i in range(cnv_length-1):
+                c = number_of_snps_file.readline().strip('\n').split("\t")
+            ed_bp = int(c[2])
+            cnv_file.write(c[0] + '\t' + str(st_bp) + '\t' + str(ed_bp) + '\t' + 'A' + '\t' + '1' + '\n') # chr start stop hap copy_number
+    cnv_file.close()
+
+    createEventBedFiles(cnvdir, cnv_path)
+
+def mergeCovFiles(base_cov_path, gen_cov_path, output_path):
+    # TODO
+    pass
 
 def init_file_names(chr, tmpbams_path, haplotypedir, event):
     """
@@ -1022,8 +1043,8 @@ def run_pipeline(results_path):
     t0 = time.time()
     outbamfn = params.GetOutputFileName()
 
-    cnv_list = glob.glob("/".join([params.GetCNVDir(), '*.*']))
-    chromosome_event = create_chr_event_list(cnv_list, chr_list)
+    cnvdir = "/".join([results_path, "cnv_dir"])
+    cnv_path = "/".join([cnvdir, 'cnv.bed'])
 
     logger.debug('pipeline started!')
 
@@ -1036,8 +1057,11 @@ def run_pipeline(results_path):
 
     generateCNVCoord(phase_path, results_path)
 
+    cnv_list = glob.glob("/".join([params.GetCNVDir(), '*.*']))
+    chromosome_event = create_chr_event_list(cnv_list, chr_list)
+
     for cnv_path in cnv_list:
-        initialize_pipeline(phase_path, haplotype_path, cnv_path)
+        initialize_pipeline(results_path, phase_path, haplotype_path, cnv_path)
 
     pool1 = multiprocessing.Pool(processes=12, initializer=initPool, initargs=[logQueue, logger.getEffectiveLevel(), terminating])
     try:
@@ -1096,7 +1120,8 @@ def run_pipeline(results_path):
             runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + res_path)
 
     # merge cov files
-    runCommand("Rscript " + bamgineer_path + "/src/sequila/merge_coverage_files.R " + base_cov_path + " " + gen_cov_path + " " + output_path)
+    #runCommand("Rscript " + bamgineer_path + "/src/sequila/merge_coverage_files.R " + base_cov_path + " " + gen_cov_path + " " + output_path)
+    mergeCovFiles(base_cov_path, gen_cov_path, output_path)
 
     time.sleep(.1)
     #merge_final(outbamfn, finalbams_path)

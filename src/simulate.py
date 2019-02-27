@@ -22,7 +22,7 @@ def main(args):
 
     if not os.path.exists(cnvdir):
         os.makedirs(cnvdir)
-        createEventBedFiles(cnvdir, params.GetCNV())
+    #    createEventBedFiles(cnvdir, params.GetCNV())
 
     params.SetCNVDir(cnvdir)
 
