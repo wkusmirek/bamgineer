@@ -192,32 +192,32 @@ def mergeSequilaCovFiles(base_cov_path, gen_cov_path, output_path):
 
 def mergeCodexCovFiles(base_cov_path, gen_cov_path, output_path):
     import pandas as pd
-    pass
     # read base cov from multiple files
-#    base = pd.DataFrame()
-#    for filename in os.listdir(base_cov_path):
-#        if filename.endswith(".csv"): 
-#            print(os.path.join(base_cov_path, filename))
-#            df = pd.read_csv(os.path.join(base_cov_path, filename), names=['sample', 'chr', 'st_bp', 'ed_bp', 'len', 'cov'])
-#            base = base.append(df, ignore_index=True)
+    base = pd.DataFrame()
+    for filename in os.listdir(base_cov_path):
+        if filename.endswith(".csv"): 
+            print(os.path.join(base_cov_path, filename))
+            df = pd.read_csv(os.path.join(base_cov_path, filename), names=['chr', 'st_bp', 'ed_bp', 'cov'])
+            base = base.append(df, ignore_index=True)
 
     # read gen cov from multiple files
-#    gen = pd.DataFrame()
-#    for filename in os.listdir(gen_cov_path):
-#        if filename.endswith(".csv"): 
-#            print(os.path.join(gen_cov_path, filename))
-#            df = pd.read_csv(os.path.join(gen_cov_path, filename), names=['sample', 'chr', 'st_bp', 'ed_bp', 'len', 'cov'])
-#            gen = gen.append(df, ignore_index=True)
+    gen = pd.DataFrame()
+    for filename in os.listdir(gen_cov_path):
+        if filename.endswith(".csv"): 
+            print(os.path.join(gen_cov_path, filename))
+            df = pd.read_csv(os.path.join(gen_cov_path, filename), names=['chr', 'st_bp', 'ed_bp', 'cov'])
+            gen = gen.append(df, ignore_index=True)
 
     # replace values in base cov
-#    for index, row in gen.iterrows():
-#        base.loc[(base['chr'] == row['chr']) & (base['st_bp'] == row['st_bp']) & (base['ed_bp'] == row['ed_bp']), 'cov'] = row['cov']
+    for index, row in gen.iterrows():
+        if row['cov'] != 0:
+            base.loc[(base['chr'] == row['chr']) & (base['st_bp'] == row['st_bp']) & (base['ed_bp'] == row['ed_bp']), 'cov'] = row['cov']
 
     # sort results
-#    base = base.sort_values(['chr', 'st_bp'])
+    base = base.sort_values(['chr', 'st_bp'])
 
     # store output to file
-#    base[['chr','st_bp','ed_bp','cov']].to_csv(output_path, sep=',', header=False, index=False)
+    base[['chr','st_bp','ed_bp','cov']].to_csv(output_path, sep=',', header=False, index=False)
 
 def init_file_names(chr, tmpbams_path, haplotypedir, event):
     """
@@ -1171,7 +1171,7 @@ def run_pipeline(results_path):
 
     # input files
     for file in os.listdir(spltbams_path):
-        if file.endswith("byname.bam"):
+        if file.endswith(".bam") and not file.endswith("byname.bam"):
             bam_path = os.path.join(spltbams_path, file)
             res_path = "/".join([sequila_base_cov_path, os.path.basename(bam_path),]) + ".csv"
             runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + res_path)
@@ -1189,8 +1189,10 @@ def run_pipeline(results_path):
 
     # merge cov files
     #runCommand("Rscript " + bamgineer_path + "/src/sequila/merge_coverage_files.R " + sequila_base_cov_path + " " + sequila_gen_cov_path + " " + output_path)
-    mergeSequilaCovFiles(sequila_base_cov_path, sequila_gen_cov_path, output_path)
-    mergeCodexCovFiles(codex_base_cov_path, codex_gen_cov_path, output_path)
+    sequila_output_path = "/".join([res_path, 'cov_sequila.csv'])
+    codex_output_path = "/".join([res_path, 'cov_codex.csv'])
+    mergeSequilaCovFiles(sequila_base_cov_path, sequila_gen_cov_path, sequila_output_path)
+    mergeCodexCovFiles(codex_base_cov_path, codex_gen_cov_path, codex_output_path)
 
     time.sleep(.1)
     #merge_final(outbamfn, finalbams_path)

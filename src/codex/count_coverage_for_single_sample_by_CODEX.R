@@ -58,4 +58,4 @@ outputFile <- args[5] # /home/wiktor/CNV/coverage/NA12830_coverage.txt
 bambedObj <- getbambed(bamdir = bamFile, bedFile = bedFile, sampname = NULL, projectname = NULL, chr)
 coverageObj <- count_coverage_for_single_sample_by_CODEX(bambedObj, mapqthres = mapqthres)
 finalDf <- data.frame(chrom=chr, start=start(bambedObj$ref), end=end(bambedObj$ref), readCount=coverageObj$Y )
-write.table(finalDf, sep="\t", col.names=F, row.names=F, quote=F,  file = outputFile)
+write.table(finalDf, sep=",", col.names=F, row.names=F, quote=F,  file = outputFile)

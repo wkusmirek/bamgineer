@@ -57,6 +57,9 @@ RUN pip install pandas
 # R packages
 RUN Rscript -e "install.packages(c('data.table', 'reshape', 'dplyr'), lib='/usr/local/lib/R/site-library')"
 
+# CODEX
+RUN Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite('CODEX')"
+
 # bamgineer
 RUN git clone --single-branch --branch sequila https://github.com/wkusmirek/bamgineer.git
 
