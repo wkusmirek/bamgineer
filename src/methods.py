@@ -143,10 +143,9 @@ def generateCNVCoord(phase_path, results_path):
     cnvdir = "/".join([results_path, "cnv_dir"])
     cnv_path = "/".join([results_path, 'cnv.bed'])
     cnv_file = open(cnv_path, 'w')
-    # TODO
 
     cnv_length = 3
-    min_snps_per_exon = 2
+    min_snps_per_exon = 3
     number_of_snps_file = open(number_of_snps_path, 'r')
 
     while True:
@@ -164,8 +163,29 @@ def generateCNVCoord(phase_path, results_path):
     createEventBedFiles(cnvdir, cnv_path)
 
 def mergeCovFiles(base_cov_path, gen_cov_path, output_path):
-    # TODO
-    pass
+    import pandas as pd
+    # read base cov from multiple files
+    base = pd.DataFrame()
+    for filename in os.listdir(base_cov_path):
+        if filename.endswith(".csv"): 
+            print(os.path.join(base_cov_path, filename))
+            df = pd.read_csv(os.path.join(base_cov_path, filename), names=['sample', 'chr', 'st_bp', 'ed_bp', 'len', 'cov'])
+            base = base.append(df, ignore_index=True)
+
+    # read gen cov from multiple files
+    gen = pd.DataFrame()
+    for filename in os.listdir(gen_cov_path):
+        if filename.endswith(".csv"): 
+            print(os.path.join(gen_cov_path, filename))
+            df = pd.read_csv(os.path.join(gen_cov_path, filename), names=['sample', 'chr', 'st_bp', 'ed_bp', 'len', 'cov'])
+            gen = gen.append(df, ignore_index=True)
+
+    # replace values in base cov
+    for index, row in gen.iterrows():
+        base.loc[(base['chr'] == row['chr']) & (base['st_bp'] == row['st_bp']) & (base['ed_bp'] == row['ed_bp']), 'cov'] = row['cov']
+
+    # store output to file
+    base[['chr','st_bp','ed_bp','cov']].to_csv(output_path, sep=',', header=False, index=False)
 
 def init_file_names(chr, tmpbams_path, haplotypedir, event):
     """
