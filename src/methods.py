@@ -1173,19 +1173,19 @@ def run_pipeline(results_path):
     for file in os.listdir(spltbams_path):
         if file.endswith(".bam") and not file.endswith("byname.bam"):
             bam_path = os.path.join(spltbams_path, file)
-            res_path = "/".join([sequila_base_cov_path, os.path.basename(bam_path),]) + ".csv"
-            runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + res_path)
-            res_path = "/".join([codex_base_cov_path, os.path.basename(bam_path),]) + ".csv"
-            runCommand("Rscript " + bamgineer_path + "/src/codex/count_coverage_for_single_sample_by_CODEX.R " + bam_path + " " + exons_path + " 20 20 " + res_path)
+            out_path = "/".join([sequila_base_cov_path, os.path.basename(bam_path),]) + ".csv"
+            runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + out_path)
+            out_path = "/".join([codex_base_cov_path, os.path.basename(bam_path),]) + ".csv"
+            runCommand("Rscript " + bamgineer_path + "/src/codex/count_coverage_for_single_sample_by_CODEX.R " + bam_path + " " + exons_path + " 20 20 " + out_path)
 
     # gain/loss files
     for file in os.listdir(finalbams_path):
         if file.endswith(".bam"):
             bam_path = os.path.join(finalbams_path, file)
-            res_path = "/".join([sequila_gen_cov_path, os.path.basename(bam_path),]) + ".csv"
-            runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + res_path)
-            res_path = "/".join([codex_gen_cov_path, os.path.basename(bam_path),]) + ".csv"
-            runCommand("Rscript " + bamgineer_path + "/src/codex/count_coverage_for_single_sample_by_CODEX.R " + bam_path + " " + exons_path + " 20 20 " + res_path)
+            out_path = "/".join([sequila_gen_cov_path, os.path.basename(bam_path),]) + ".csv"
+            runCommand("Rscript " + bamgineer_path + "/src/sequila/count_coverage.R " + exons_path + " " + bam_path + " " + out_path)
+            out_path = "/".join([codex_gen_cov_path, os.path.basename(bam_path),]) + ".csv"
+            runCommand("Rscript " + bamgineer_path + "/src/codex/count_coverage_for_single_sample_by_CODEX.R " + bam_path + " " + exons_path + " 20 20 " + out_path)
 
     # merge cov files
     #runCommand("Rscript " + bamgineer_path + "/src/sequila/merge_coverage_files.R " + sequila_base_cov_path + " " + sequila_gen_cov_path + " " + output_path)
