@@ -5,6 +5,9 @@ configReader = SafeConfigParser()
 project_name = ''
 infile = ''
 cnv_bed = ''
+cnv_length = 0
+min_snps_per_exon = 0
+number_of_cnvs = 0
 cnv_list_dir = ''
 cancer_type = ''
 spltbams_path = ''
@@ -21,7 +24,6 @@ vcftools_path = ''
 phase = False
 ctDNA = False
 singleXY = False
-
 
 def InitConfigReader(configFile):
     """init the config file"""
