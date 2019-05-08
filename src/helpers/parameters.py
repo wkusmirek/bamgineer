@@ -125,21 +125,29 @@ def SetCNV(val):
     global cnv_bed
     cnv_bed = val
 
+def GetCNV():
+    return cnv_bed
+
 def SetCnvLength(val):
     global cnv_length
     cnv_length = val
+
+def GetCnvLength():
+    return cnv_length
 
 def SetMinSnpsPerExon(val):
     global min_snps_per_exon
     min_snps_per_exon = val
 
+def GetMinSnpsPerExon():
+    return min_snps_per_exon
+
 def SetNumberOfCnvs(val):
     global number_of_cnvs
     number_of_cnvs = val
 
-def GetCNV():
-    return cnv_bed
-
+def GetNumberOfCnvs():
+    return number_of_cnvs
 
 def SetCNVDir(cnv_l):
     global cnv_list_dir
