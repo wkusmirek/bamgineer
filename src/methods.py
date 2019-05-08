@@ -144,9 +144,9 @@ def generateCNVCoord(phase_path, results_path):
     cnv_path = "/".join([results_path, 'cnv.bed'])
     cnv_file = open(cnv_path, 'w')
 
-    cnv_length = params.GetCnvLength():
-    min_snps_per_exon = params.GetMinSnpsPerExon():
-    number_of_cnvs = params.GetNumberOfCnvs():
+    cnv_length = int(params.GetCnvLength())
+    min_snps_per_exon = int(params.GetMinSnpsPerExon())
+    number_of_cnvs = int(params.GetNumberOfCnvs())
     number_of_snps_file = open(number_of_snps_path, 'r')
     number_of_generated_cnvs = 0
 
