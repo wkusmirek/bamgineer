@@ -119,10 +119,21 @@ def SetPicardPath(path):
 def GetPicardPath():
     return java_path
 
-def SetCNV(cnv):
+def SetCNV(val):
     global cnv_bed
-    cnv_bed = cnv
+    cnv_bed = val
 
+def SetCnvLength(val):
+    global cnv_length
+    cnv_length = val
+
+def SetMinSnpsPerExon(val):
+    global min_snps_per_exon
+    min_snps_per_exon = val
+
+def SetNumberOfCnvs(val):
+    global number_of_cnvs
+    number_of_cnvs = val
 
 def GetCNV():
     return cnv_bed

@@ -15,6 +15,9 @@ def main(args):
     params.SetctDNA(args.ctDNA)
     params.SetXY(args.singleXY)
     params.SetCNV(args.cnvBed)
+    params.SetCnvLength(args.cnvLength)
+    params.SetMinSnpsPerExon(args.minSnpsPerExon)
+    params.SetNumberOfCnvs(args.numberOfCnvs)
 
     results_path = configReader.get('RESULTS', 'results_path')
 
@@ -64,6 +67,12 @@ if __name__ == '__main__':
                         help='list of chromosomes to process')
     parser.add_argument('-cancertype', dest='cancerType', required=False,
                         help='acronym for cancer type')
+    parser.add_argument('-cnv_length', dest='cnvLength', required=False,
+                        help='length of generated CNVs')
+    parser.add_argument('-min_snps_per_exon', dest='minSnpsPerExon', required=False,
+                        help='minimum number of snps per exon in simulation seed')
+    parser.add_argument('-number_of_cnvs', dest='numberOfCnvs', required=False,
+                        help='number of generated cnvs')
 
     args = parser.parse_args()
 

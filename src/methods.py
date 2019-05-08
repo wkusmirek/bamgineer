@@ -146,7 +146,9 @@ def generateCNVCoord(phase_path, results_path):
 
     cnv_length = 3
     min_snps_per_exon = 3
+    number_of_cnvs = 3
     number_of_snps_file = open(number_of_snps_path, 'r')
+    number_of_generated_cnvs = 0
 
     while True:
         line = number_of_snps_file.readline()
@@ -158,6 +160,9 @@ def generateCNVCoord(phase_path, results_path):
                 c = number_of_snps_file.readline().strip('\n').split("\t")
             ed_bp = int(c[2])
             cnv_file.write(c[0] + '\t' + str(st_bp) + '\t' + str(ed_bp) + '\t' + 'A' + '\t' + '1' + '\n') # chr start stop hap copy_number
+        number_of_generated_cnvs = number_of_generated_cnvs + 1
+        if number_of_generated_cnvs == number_of_cnvs:
+            break
     cnv_file.close()
 
     createEventBedFiles(cnvdir, cnv_path)
