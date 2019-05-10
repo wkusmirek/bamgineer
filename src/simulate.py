@@ -19,6 +19,7 @@ def main(args):
     params.SetMinSnpsPerExon(args.minSnpsPerExon)
     params.SetNumberOfCnvs(args.numberOfCnvs)
     params.SetSampleName(args.sampleName)
+    params.SetChr(args.chr)
 
     results_path = configReader.get('RESULTS', 'results_path')
 
