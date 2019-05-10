@@ -73,6 +73,8 @@ if __name__ == '__main__':
                         help='minimum number of snps per exon in simulation seed')
     parser.add_argument('-number_of_cnvs', dest='numberOfCnvs', required=False,
                         help='number of generated cnvs')
+    parser.add_argument('-sample_name', dest='sampleName', required=False,
+                        help='name of sample')
 
     args = parser.parse_args()
 
