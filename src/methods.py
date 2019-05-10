@@ -145,7 +145,7 @@ def generateCNVCoord(phase_path, results_path):
     cnv_file = open(cnv_path, 'w')
     cnv_ref_path = "/".join([results_path, 'cnv_ref.bed'])
     cnv_ref_file = open(cnv_ref_path, 'w')
-    cnv_ref_file.write('sample_name,cnv,chr,st_bp,ed_bp,copy_no,AF,Length')
+    cnv_ref_file.write('sample_name,cnv,chr,st_bp,ed_bp,copy_no,AF,Length\n')
 
     cnv_length = int(params.GetCnvLength())
     min_snps_per_exon = int(params.GetMinSnpsPerExon())
@@ -163,7 +163,7 @@ def generateCNVCoord(phase_path, results_path):
                 c = number_of_snps_file.readline().strip('\n').split("\t")
             ed_bp = int(c[2])
             cnv_file.write(c[0] + '\t' + str(st_bp) + '\t' + str(ed_bp) + '\t' + 'A' + '\t' + '1' + '\n') # chr start stop hap copy_number
-            cnv_ref_file.write(params.GetSampleName() + ',' + 'del' + ',' + 'chr' + ',' + str(st_bp) + ',' + str(ed_bp) + ',' + '1' + ',' + '0.1' + ',' + '100' + '\n') # chr start stop hap copy_number
+            cnv_ref_file.write(params.GetSampleName() + ',' + 'del' + ',' + params.GetChr() + ',' + str(st_bp) + ',' + str(ed_bp) + ',' + '1' + ',' + '0.1' + ',' + '100' + '\n') # chr start stop hap copy_number
             number_of_generated_cnvs = number_of_generated_cnvs + 1
             if number_of_generated_cnvs == number_of_cnvs:
                 break

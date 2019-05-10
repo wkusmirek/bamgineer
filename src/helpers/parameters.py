@@ -9,6 +9,7 @@ cnv_length = 0
 min_snps_per_exon = 0
 number_of_cnvs = 0
 sample_name = ''
+chr = ''
 cnv_list_dir = ''
 cancer_type = ''
 spltbams_path = ''
@@ -156,6 +157,13 @@ def SetSampleName(val):
 
 def GetSampleName():
     return sample_name
+
+def SetChr(val):
+    global chr
+    chr = val
+
+def GetChr():
+    return chr
 
 def SetCNVDir(cnv_l):
     global cnv_list_dir

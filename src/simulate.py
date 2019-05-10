@@ -18,6 +18,7 @@ def main(args):
     params.SetCnvLength(args.cnvLength)
     params.SetMinSnpsPerExon(args.minSnpsPerExon)
     params.SetNumberOfCnvs(args.numberOfCnvs)
+    params.SetSampleName(args.sampleName)
 
     results_path = configReader.get('RESULTS', 'results_path')
 
@@ -75,6 +76,8 @@ if __name__ == '__main__':
                         help='number of generated cnvs')
     parser.add_argument('-sample_name', dest='sampleName', required=False,
                         help='name of sample')
+    parser.add_argument('-chr', dest='chr', required=False,
+                        help='chromosome')
 
     args = parser.parse_args()
 
